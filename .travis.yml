@@ -1,0 +1,35 @@
+---
+# Adapted from https://github.com/drhelius/travis-ansible-demo/blob/master/.travis.yml
+sudo: required
+
+env:
+  global:
+    - ansible_role: slurm
+    - container_id: ansible-container
+
+  matrix:
+    - docker_image: marvelnccr/ubuntu-docker-base
+      version: 1.0
+      ansible_user: ubuntu
+
+services:
+  - docker
+
+before_install:
+  - 'sudo docker --version'
+  - 'sudo docker pull ${docker_image}:${version}'
+
+script:
+  - 'sudo docker run --name ${container_id} --detach --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro --volume="${PWD}":/etc/ansible/roles/${ansible_role}:ro ${docker_image}:${version}'
+  - 'sudo docker exec --user ${ansible_user} "${container_id}" env ANSIBLE_FORCE_COLOR=1 ansible-playbook -v /etc/ansible/roles/${ansible_role}/tests/test.yml --syntax-check'
+  - 'sudo docker exec --user ${ansible_user} "${container_id}" env ANSIBLE_FORCE_COLOR=1 ansible-playbook -v /etc/ansible/roles/${ansible_role}/tests/test.yml'
+  - >
+    sudo docker exec --user ${ansible_user} "${container_id}" env ANSIBLE_FORCE_COLOR=1 ansible-playbook -v /etc/ansible/roles/${ansible_role}/tests/test.yml
+    | tee /dev/tty
+    | grep -q 'changed=0.*failed=0'
+    && (echo 'Idempotency test: pass' && exit 0)
+    || (echo 'Idempotency test: fail' && exit 1)
+  - 'sudo docker rm -f "${container_id}"'
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/

@@ -1,0 +1,41 @@
+---
+- name: Install apt packages
+  become: True
+  become_user: "{{ root_user }}"
+  apt:
+      name: "{{ item }}"
+      state: latest
+      update_cache: True
+  with_items:
+    - slurm-wlm
+    - munge
+
+# Use configurator for generating file
+# https://slurm.schedmd.com/configurator.html
+- name: Copy slurm configuration template
+  become: True
+  become_user: "{{ root_user }}"
+  template:
+      src: slurm.conf
+      dest: /etc/slurm-llnl/slurm.conf
+
+- name: create munge key
+  become: True
+  become_user: "{{ root_user }}"
+  shell: /usr/sbin/create-munge-key
+
+- name: start services
+  become: True
+  become_user: "{{ root_user }}"
+  service:
+      name: "{{ item }}"
+      state: started
+  with_items:
+  - slurmctld
+  - slurmdbd
+  - slurmd
+
+
+#For some reason, a permission change is needed to avoid some later warnings:
+#sudo chmod g-w /var/log
+#sudo chmod g-w /var/log/munge

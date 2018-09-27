@@ -1,0 +1,17 @@
+---
+allow_duplicates: no
+
+galaxy_info:
+  author: "MARVEL NCCR"
+  description: "An Ansible role that installs the [slurm](https://slurm.schedmd.com/) workload manager on Ubuntu."
+  license: MIT
+  min_ansible_version: 2.5
+  platforms:
+    - name: Ubuntu
+      versions:
+      - xenial
+  galaxy_tags:
+    - ubuntu
+    - application
+    - science
+  role_name: slurm
