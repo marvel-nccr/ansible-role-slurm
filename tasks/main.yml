@@ -10,6 +10,15 @@
     - slurm-wlm
     - munge
 
+- name: hide slurm user (created by slurm package) on login screens
+  become: true
+  become_user: "{{ root_user }}"
+  ini_file:
+    path: "/var/lib/AccountsService/users/slurm"
+    section: "User"
+    option: "SystemAccount"
+    value: "true"
+
 # Use configurator for generating file
 # https://slurm.schedmd.com/configurator.html
 - name: Copy slurm configuration template
@@ -39,3 +48,5 @@
 #For some reason, a permission change is needed to avoid some later warnings:
 #sudo chmod g-w /var/log
 #sudo chmod g-w /var/log/munge
+#
+
