@@ -19,7 +19,7 @@
     option: "SystemAccount"
     value: "true"
 
-# Use configurator for generating file
+# Used configurator for generating file (use the one of the correct SLURM version!)
 # https://slurm.schedmd.com/configurator.html
 - name: Copy slurm configuration template
   become: True
@@ -31,7 +31,12 @@
 - name: create munge key
   become: True
   become_user: "{{ root_user }}"
-  shell: /usr/sbin/create-munge-key
+  # Force overwriting old key - should not happen because of the 'creates' flag
+  # below, but useful to avoid prompts
+  shell: /usr/sbin/create-munge-key -f
+  args:
+    creates: "/etc/munge/munge.key"
+
 
 - name: start services
   become: True
