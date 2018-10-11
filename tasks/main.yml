@@ -41,7 +41,7 @@
       state: started
   with_items:
   - slurmctld
-  - slurmdbd
+#  - slurmdbd
   - slurmd
 
 
