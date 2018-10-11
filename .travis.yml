@@ -25,7 +25,7 @@ script:
   - 'sudo docker exec --user root "${container_id}" hostname qmobile'
   # /etc/hosts is mounted in Docker, cannot be changed in place
   - "sudo docker exec --user root ${container_id} cp /etc/hosts /etc/hosts.new"
-  - "sudo docker exec --user root ${container_id} sed -i 's/^172\\.17.*$/172.17.0.2 qmobile/' /etc/hosts.new"
+  - "sudo docker exec --user root ${container_id} sed -ri 's/^(172\\.17\\.[0-9]+\\.[0-9]+)\\s.*$/\\1 qmobile/' /etc/hosts.new"
   - "sudo docker exec --user root ${container_id} cp /etc/hosts.new /etc/hosts"
   - 'sudo docker exec --user ${ansible_user} "${container_id}" env ANSIBLE_FORCE_COLOR=1 ansible-playbook -v /etc/ansible/roles/${ansible_role}/tests/test.yml --syntax-check'
   - 'sudo docker exec --user ${ansible_user} "${container_id}" env ANSIBLE_FORCE_COLOR=1 ansible-playbook -v /etc/ansible/roles/${ansible_role}/tests/test.yml'
