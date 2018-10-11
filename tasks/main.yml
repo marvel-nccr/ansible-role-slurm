@@ -41,8 +41,10 @@
       state: started
   with_items:
   - slurmctld
+# slurmdbd does not exist in SLURM 15.08
 #  - slurmdbd
   - slurmd
+  - munge
 
 
 #For some reason, a permission change is needed to avoid some later warnings:
