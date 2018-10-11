@@ -35,7 +35,13 @@ script:
     | grep -q 'changed=0.*failed=0'
     && (echo 'Idempotency test: pass' && exit 0)
     || (echo 'Idempotency test: fail' && exit 1)
+
+  # Test if submission works
+  - 'sudo docker exec --user ${ansible_user} "${container_id}" /etc/ansible/roles/${ansible_role}/tests/test-submit.sh'
+
   - 'sudo docker rm -f "${container_id}"'
+
+
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
