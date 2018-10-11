@@ -21,6 +21,9 @@ before_install:
 
 script:
   - 'sudo docker run --name ${container_id} --detach --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro --volume="${PWD}":/etc/ansible/roles/${ansible_role}:ro ${docker_image}:${version}'
+  - sleep 5
+  - 'sudo docker exec --user root "${container_id}" hostname qmobile'
+  - "sudo docker exec --user root ${container_id} sed -i 's/172\.17\.0\.2.*$/172.17.0.2 qmobile/' /etc/hosts"
   - 'sudo docker exec --user ${ansible_user} "${container_id}" env ANSIBLE_FORCE_COLOR=1 ansible-playbook -v /etc/ansible/roles/${ansible_role}/tests/test.yml --syntax-check'
   - 'sudo docker exec --user ${ansible_user} "${container_id}" env ANSIBLE_FORCE_COLOR=1 ansible-playbook -v /etc/ansible/roles/${ansible_role}/tests/test.yml'
   - >
