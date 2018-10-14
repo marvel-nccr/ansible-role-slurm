@@ -1,14 +1,19 @@
 ---
+- name: Creates directory
+  file:
+    path: "{{ slurm_test_folder }}"
+    state: directory
+
 - name: copy test submission files
   copy:
     src: "{{ item }}"
-    dest: "${HOME}"
+    dest: "{{ slurm_test_folder }}"
     mode: u=rwx,g=rx
   with_items:
     - test-submit.sh
     - job.sh
 
 - name: do test submission
-  command: "${HOME}/test-submit.sh"
+  command: "{{ slurm_test_folder }}/test-submit.sh"
   args:
-    creates: "${HOME}/output.txt"
+    creates: "{{ slurm_test_folder }}/test1/output.txt"

@@ -7,4 +7,6 @@ slurm_user: slurm
 slurm_cluster_name: "{{ slurm_hostname }}"
 slurm_partition_name: jobs
 
+slurm_test_folder: "${HOME}/.tests/slurm"
+
 root_user: root

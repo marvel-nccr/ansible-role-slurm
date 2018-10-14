@@ -4,7 +4,7 @@ set -e
 
 THISSCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 THEPID=$$
-FOLDER="/home/ubuntu/example$$"
+FOLDER="${THISSCRIPTDIR}/test1"
 echo "Writing to folder: $FOLDER"
 mkdir "$FOLDER"
 cd "$FOLDER"
