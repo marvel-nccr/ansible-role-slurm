@@ -1,0 +1,14 @@
+---
+- name: copy test submission files
+  copy:
+    src: "{{ item }}"
+    dest: "${HOME}"
+    mode: u=rwx,g=rx
+  with_items:
+    - test-submit.sh
+    - job.sh
+
+- name: do test submission
+  command: "${HOME}/test-submit.sh"
+  args:
+    creates: "${HOME}/output.txt"

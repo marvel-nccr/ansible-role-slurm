@@ -1,14 +1,13 @@
 ---
 - name: Install apt packages
-  become: True
+  become: true
   become_user: "{{ root_user }}"
   apt:
-      name: "{{ item }}"
-      state: latest
-      update_cache: True
-  with_items:
-    - slurm-wlm
-    - munge
+    name:
+      - slurm-wlm
+      - munge
+    state: present
+    update_cache: true
 
 - name: hide slurm user (created by slurm package) on login screens
   become: true
@@ -19,41 +18,38 @@
     option: "SystemAccount"
     value: "true"
 
-# Used configurator for generating file (use the one of the correct SLURM version!)
+# Used configurator for generating file
+# (make sure to select the correct SLURM version!)
 # https://slurm.schedmd.com/configurator.html
 - name: Copy slurm configuration template
-  become: True
+  become: true
   become_user: "{{ root_user }}"
   template:
-      src: slurm.conf
-      dest: /etc/slurm-llnl/slurm.conf
+    src: slurm.conf
+    dest: /etc/slurm-llnl/slurm.conf
 
 - name: create munge key
-  become: True
+  become: true
   become_user: "{{ root_user }}"
   # Force overwriting old key - should not happen because of the 'creates' flag
   # below, but useful to avoid prompts
-  shell: /usr/sbin/create-munge-key -f
+  command: /usr/sbin/create-munge-key -f
   args:
     creates: "/etc/munge/munge.key"
 
+- import_tasks: hostname.yml
 
 - name: start services
-  become: True
+  become: true
   become_user: "{{ root_user }}"
   service:
-      name: "{{ item }}"
-      state: started
+    name: "{{ item }}"
+    state: started
   with_items:
-  - slurmctld
+    - slurmctld
+    - slurmd
+    - munge
 # slurmdbd does not exist in SLURM 15.08
-#  - slurmdbd
-  - slurmd
-  - munge
+#    - slurmdbd
 
-
-#For some reason, a permission change is needed to avoid some later warnings:
-#sudo chmod g-w /var/log
-#sudo chmod g-w /var/log/munge
-#
-
+- import_tasks: tests.yml

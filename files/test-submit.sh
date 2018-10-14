@@ -8,8 +8,8 @@ FOLDER="/home/ubuntu/example$$"
 echo "Writing to folder: $FOLDER"
 mkdir "$FOLDER"
 cd "$FOLDER"
-cp "$THISSCRIPTDIR/submit-example.sh" .
-sbatch submit-example.sh
+cp "$THISSCRIPTDIR/job.sh" .
+sbatch job.sh
 sleep 1
 
 echo "Current queue status:"

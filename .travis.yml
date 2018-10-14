@@ -1,47 +1,39 @@
 ---
-# Adapted from https://github.com/drhelius/travis-ansible-demo/blob/master/.travis.yml
-sudo: required
-
-env:
-  global:
-    - ansible_role: slurm
-    - container_id: ansible-container
-
-  matrix:
-    - docker_image: marvelnccr/ubuntu-docker-base
-      version: 1.0
-      ansible_user: ubuntu
-
+# Adapted from
+# - https://github.com/drhelius/travis-ansible-demo/blob/master/.travis.yml
+# - https://github.com/geerlingguy/ansible-role-docker/blob/master/.travis.yml
+language: python
 services:
   - docker
 
-before_install:
-  - 'sudo docker --version'
-  - 'sudo docker pull ${docker_image}:${version}'
+env:
+  global:
+    - ANSIBLE_ROLE: slurm
+
+matrix:
+  include:
+    - name: Ubuntu-18.04
+      env:
+        - DOCKER_IMAGE: marvelnccr/ubuntu-docker-base
+        - DOCKER_IMAGE_VERSION: 2.2
+        - ANSIBLE_USER: ubuntu
+#    - name: Ubuntu-16.04
+#      env:
+#        - docker_image: marvelnccr/ubuntu-docker-base
+#        - version: 1.1
+#        - ansible_user: ubuntu
+
+install:
+  - pip install molecule docker
+
+before_script:
+  # Use actual Ansible Galaxy role name for the project directory.
+  - cd ../
+  - mv ansible-role-$ANSIBLE_ROLE marvel-nccr.$ANSIBLE_ROLE
+  - cd marvel-nccr.$ANSIBLE_ROLE
 
 script:
-  - 'sudo docker run --name ${container_id} --detach --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro --volume="${PWD}":/etc/ansible/roles/${ansible_role}:ro ${docker_image}:${version}'
-  - sleep 5
-  - 'sudo docker exec --user root "${container_id}" hostname qmobile'
-  # /etc/hosts is mounted in Docker, cannot be changed in place
-  - "sudo docker exec --user root ${container_id} cp /etc/hosts /etc/hosts.new"
-  - "sudo docker exec --user root ${container_id} sed -ri 's/^(172\\.17\\.[0-9]+\\.[0-9]+)\\s.*$/\\1 qmobile/' /etc/hosts.new"
-  - "sudo docker exec --user root ${container_id} cp /etc/hosts.new /etc/hosts"
-  - 'sudo docker exec --user ${ansible_user} "${container_id}" env ANSIBLE_FORCE_COLOR=1 ansible-playbook -v /etc/ansible/roles/${ansible_role}/tests/test.yml --syntax-check'
-  - 'sudo docker exec --user ${ansible_user} "${container_id}" env ANSIBLE_FORCE_COLOR=1 ansible-playbook -v /etc/ansible/roles/${ansible_role}/tests/test.yml'
-  - >
-    sudo docker exec --user ${ansible_user} "${container_id}" env ANSIBLE_FORCE_COLOR=1 ansible-playbook -v /etc/ansible/roles/${ansible_role}/tests/test.yml
-    | tee /dev/tty
-    | grep -q 'changed=0.*failed=0'
-    && (echo 'Idempotency test: pass' && exit 0)
-    || (echo 'Idempotency test: fail' && exit 1)
-
-  # Test if submission works
-  - 'sudo docker exec --user ${ansible_user} "${container_id}" /etc/ansible/roles/${ansible_role}/tests/test-submit.sh'
-
-  - 'sudo docker rm -f "${container_id}"'
-
-
+  - molecule test
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/

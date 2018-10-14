@@ -1,0 +1,14 @@
+---
+- name: set hostname to {{ slurm_hostname }}
+  become: true
+  become_user: "{{ root_user }}"
+  hostname:
+    name: "{{ slurm_hostname }}"
+
+# Yaml requires escaping backslashes in double quotes but not in single quotes
+- lineinfile:
+    path: /etc/hosts
+    regexp: "^(172\\.17\\.[0-9]+\\.[0-9]+)\\s+.*$"
+    line: "\\1 {{ slurm_hostname }}"
+    backrefs: true
+    unsafe_writes: true
