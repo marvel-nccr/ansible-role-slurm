@@ -53,3 +53,4 @@
 #    - slurmdbd
 
 - import_tasks: tests.yml
+  when: run_tests is defined and run_tests
