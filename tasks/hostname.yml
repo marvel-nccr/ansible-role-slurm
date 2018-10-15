@@ -6,9 +6,11 @@
     name: "{{ slurm_hostname }}"
 
 # Yaml requires escaping backslashes in double quotes but not in single quotes
+# This works for docker, both locally and on travis
 - lineinfile:
     path: /etc/hosts
     regexp: "^(172\\.17\\.[0-9]+\\.[0-9]+)\\s+.*$"
     line: "\\1 {{ slurm_hostname }}"
     backrefs: true
     unsafe_writes: true
+  when: cloud_platform is defined and cloud_platform == 'docker'

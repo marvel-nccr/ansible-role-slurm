@@ -6,7 +6,7 @@ THISSCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 THEPID=$$
 FOLDER="${THISSCRIPTDIR}/test1"
 echo "Writing to folder: $FOLDER"
-mkdir "$FOLDER"
+mkdir -p "$FOLDER"
 cd "$FOLDER"
 cp "$THISSCRIPTDIR/job.sh" .
 sbatch job.sh

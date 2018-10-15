@@ -26,13 +26,15 @@
   become_user: "{{ root_user }}"
   template:
     src: slurm.conf
+    owner: "{{ slurm_user }}"
     dest: /etc/slurm-llnl/slurm.conf
 
+# munge key already created by apt-get install
+# will not overwrite key due to 'creates' flag
+# but useful to avoid prompts
 - name: create munge key
   become: true
   become_user: "{{ root_user }}"
-  # Force overwriting old key - should not happen because of the 'creates' flag
-  # below, but useful to avoid prompts
   command: /usr/sbin/create-munge-key -f
   args:
     creates: "/etc/munge/munge.key"
