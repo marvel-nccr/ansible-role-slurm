@@ -13,6 +13,10 @@
     - test-submit.sh
     - job.sh
 
+# in case the node is stuck in state "drain", recover via
+# sudo -su slurm scontrol
+# scontrol: update NodeName=qmobile State=DOWN Reason="undraining"
+# scontrol: update NodeName=qmobile State=RESUME
 - name: do test submission
   command: "{{ slurm_test_folder }}/test-submit.sh"
   args:
