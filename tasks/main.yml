@@ -6,6 +6,7 @@
     name:
       - slurm-wlm
       - munge
+      - sendmail
     state: present
     update_cache: true
 
