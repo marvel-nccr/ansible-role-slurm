@@ -19,6 +19,17 @@
     option: "SystemAccount"
     value: "true"
 
+- name: create directories for slurm
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ slurm_user }}"
+  with_items:
+    - /var/run/slurm-llnl
+    - /var/lib/slurm-llnl/slurmd
+    - /var/lib/slurm-llnl/slurmctld
+    - /var/log/slurm-llnl
+
 # Used configurator for generating file
 # (make sure to select the correct SLURM version!)
 # https://slurm.schedmd.com/configurator.html
@@ -42,7 +53,18 @@
 
 - import_tasks: hostname.yml
 
-- name: start services
+# munge should start before slurm daemons
+# https://slurm.schedmd.com/quickstart_admin.html
+- name: start munge service
+  become: true
+  become_user: "{{ root_user }}"
+  service:
+    name: "{{ item }}"
+    state: started
+  with_items:
+    - munge
+
+- name: start slurm services
   become: true
   become_user: "{{ root_user }}"
   service:
@@ -51,7 +73,6 @@
   with_items:
     - slurmctld
     - slurmd
-    - munge
 # slurmdbd does not exist in SLURM 15.08
 #    - slurmdbd
 
