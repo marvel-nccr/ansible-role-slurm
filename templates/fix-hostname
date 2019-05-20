@@ -1,0 +1,17 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          fix-hostname
+# Required-Start:    $remote_fs $syslog 
+# Required-Stop:     $remote_fs $syslog 
+# X-Start-Before:    slurmctld slurmd
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Force hostname
+# Description:       Force hostname to {{ slurm_hostname }}
+### END INIT INFO
+
+# We set the hostname regardless of $1, i.e. even if this script is called
+# with a parameter 'start' or 'stop'
+HOSTNAME={{ slurm_hostname }}
+hostname $HOSTNAME
+echo $HOSTNAME > /etc/hostname

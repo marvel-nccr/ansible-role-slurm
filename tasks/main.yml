@@ -20,6 +20,8 @@
     value: "true"
 
 - name: create directories for slurm
+  become: true
+  become_user: "{{ root_user }}"
   file:
     path: "{{ item }}"
     state: directory
@@ -29,6 +31,9 @@
     - /var/lib/slurm-llnl/slurmd
     - /var/lib/slurm-llnl/slurmctld
     - /var/log/slurm-llnl
+    # See issue and comments therein
+    # https://github.com/Azure/azure-quickstart-templates/issues/1796
+    - /var/spool/slurmd
 
 # Used configurator for generating file
 # (make sure to select the correct SLURM version!)
@@ -52,6 +57,9 @@
     creates: "/etc/munge/munge.key"
 
 - import_tasks: hostname.yml
+
+- include_tasks: hostname_service.yml
+  when: slurm_hostname_service
 
 # munge should start before slurm daemons
 # https://slurm.schedmd.com/quickstart_admin.html
