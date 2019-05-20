@@ -11,6 +11,6 @@ slurm_test_folder: "${HOME}/.tests/slurm"
 
 # Adds a system service that forces the hostname on startup
 # Note: This is e.g. necessary on cloud platforms like AWS
-slurm_hostname_service: False
+slurm_hostname_service: false
 
 root_user: root
