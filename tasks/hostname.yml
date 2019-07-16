@@ -1,7 +1,6 @@
 ---
 - name: set hostname to {{ slurm_hostname }}
   become: true
-  become_user: "{{ root_user }}"
   hostname:
     name: "{{ slurm_hostname }}"
 

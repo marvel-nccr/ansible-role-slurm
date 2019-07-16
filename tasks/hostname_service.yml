@@ -4,7 +4,6 @@
 
 - name: copy init.d template
   become: true
-  become_user: "{{ root_user }}"
   template:
     src: "fix-hostname"
     dest: "/etc/init.d/"
@@ -12,14 +11,12 @@
 
 - name: enable service forcing hostname to {{ slurm_hostname }}
   become: true
-  become_user: "{{ root_user }}"
   command: update-rc.d fix-hostname defaults
   args:
     creates: "/etc/rc5.d/S??fix-hostname"
 
 - name: start service to set the hostname
   become: true
-  become_user: "{{ root_user }}"
   service:
     name: fix-hostname
     state: started
