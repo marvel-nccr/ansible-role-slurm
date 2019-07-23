@@ -7,7 +7,7 @@ slurm_user: slurm
 slurm_cluster_name: "{{ slurm_hostname }}"
 slurm_partition_name: jobs
 
-slurm_test_folder: "${HOME}/.tests/slurm"
+slurm_test_folder: "/tmp/slurm-tests"
 
 # Adds a system service that forces the hostname on startup
 # Note: This is e.g. necessary on cloud platforms like AWS
