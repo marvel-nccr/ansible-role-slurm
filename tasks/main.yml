@@ -4,6 +4,8 @@
   apt:
     name:
       - slurm-wlm
+      - slurm-wlm-basic-plugins
+      - slurm-wlm-basic-plugins-dev
       - munge
       - sendmail
     state: present
