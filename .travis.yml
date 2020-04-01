@@ -10,21 +10,18 @@ env:
   global:
     - ANSIBLE_ROLE: slurm
 
-matrix:
-  include:
+  matrix:
     - name: Ubuntu-18.04
       env:
-        - DOCKER_IMAGE: marvelnccr/ubuntu-docker-base
-        - DOCKER_IMAGE_VERSION: 2.2
-        - ANSIBLE_USER: ubuntu
-#    - name: Ubuntu-16.04
-#      env:
-#        - docker_image: marvelnccr/ubuntu-docker-base
-#        - version: 1.1
-#        - ansible_user: ubuntu
+        - DOCKER_IMAGE=marvelnccr/ubuntu-docker-base
+        - DOCKER_IMAGE_VERSION=2.2
+    - name: Ubuntu-16.04
+      env:
+        - DOCKER_IMAGE=marvelnccr/ubuntu-docker-base
+        - DOCKER_IMAGE_VERSION=1.1
 
 install:
-  - pip install molecule docker
+  - pip install -r requirements.txt
 
 before_script:
   # Use actual Ansible Galaxy role name for the project directory.
