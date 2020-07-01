@@ -43,6 +43,19 @@
     src: slurm.conf
     owner: "{{ slurm_user }}"
     dest: /etc/slurm-llnl/slurm.conf
+  register: conf_template
+
+- name: create confinguration update script
+  template:
+    src: update_conf.j2.py
+    dest: /usr/bin/update-slurm-conf
+    mode: "755"
+  register: conf_script
+
+- name: run configuration update script  # noqa 503
+  when: conf_template.changed or conf_script.changed
+  command: /usr/bin/update-slurm-conf
+  changed_when: false
 
 # munge key already created by apt-get install
 # will not overwrite key due to 'creates' flag

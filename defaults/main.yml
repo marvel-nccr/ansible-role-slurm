@@ -1,6 +1,5 @@
 ---
 slurm_hostname: qmobile
-slurm_cpus: 2
 # Size of real memory on the node in megabytes
 slurm_memory: 1024
 slurm_user: slurm
