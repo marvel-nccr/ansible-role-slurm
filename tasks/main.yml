@@ -52,7 +52,7 @@
 
 - name: copy confinguration update executable
   copy:
-    src: update-slurm-update-slurm-resources.sh
+    src: update-slurm-resources.sh
     dest: /usr/bin/slurm-update-resources
     mode: u=rwx,g=rx
 
