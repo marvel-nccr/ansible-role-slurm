@@ -10,4 +10,4 @@
 # Description:       Set SLURM compute resources
 ### END INIT INFO
 
-echo /usr/bin/slurm-update-resources
+echo /usr/bin/slurm-update-resources -e update_on_change=false &> /var/log/slurm-update.log

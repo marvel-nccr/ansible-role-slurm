@@ -5,18 +5,18 @@
 - name: copy init.d template
   become: true
   copy:
-    src: "set-resources.sh"
-    dest: "/etc/init.d/set-resources"
+    src: "slurm-resources.sh"
+    dest: "/etc/init.d/slurm-resources"
     mode: 0755
 
 - name: enable service to set the slurm compute resources
   become: true
-  command: update-rc.d set-resources defaults
+  command: update-rc.d slurm-resources defaults
   args:
-    creates: "/etc/rc5.d/S??set-resources"
+    creates: "/etc/rc5.d/S??slurm-resources"
 
 - name: start service to set the slurm compute resources
   become: true
   service:
-    name: set-resources
+    name: slurm-resources
     state: started
