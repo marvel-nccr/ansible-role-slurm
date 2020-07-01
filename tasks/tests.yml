@@ -1,5 +1,9 @@
 ---
-- name: Creates directory
+- name: run configuration update script
+  command: /usr/bin/slurm-update-resources
+  changed_when: false
+
+- name: create test directory
   file:
     path: "{{ slurm_test_folder }}"
     state: directory

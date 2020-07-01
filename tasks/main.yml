@@ -45,17 +45,19 @@
     dest: /etc/slurm-llnl/slurm.conf
   register: conf_template
 
-- name: create confinguration update script
+- name: create confinguration update playbook
   template:
-    src: update_conf.j2.py
-    dest: /usr/bin/update-slurm-conf
-    mode: "755"
-  register: conf_script
+    src: config-playbook.yml.j2
+    dest: /etc/slurm-llnl/update-playbook.yml
 
-- name: run configuration update script  # noqa 503
-  when: conf_template.changed or conf_script.changed
-  command: /usr/bin/update-slurm-conf
-  changed_when: false
+- name: copy confinguration update executable
+  copy:
+    src: update-slurm-conf.sh
+    dest: /usr/bin/slurm-update-resources
+    mode: u=rwx,g=rx
+
+- include_tasks: resources_service.yml
+  when: slurm_resources_service
 
 # munge key already created by apt-get install
 # will not overwrite key due to 'creates' flag

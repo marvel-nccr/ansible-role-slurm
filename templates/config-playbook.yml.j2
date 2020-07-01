@@ -1,0 +1,33 @@
+- name: Update SLURM configuration
+  hosts: localhost
+
+  vars:
+    slurm_hostname: "{{ slurm_hostname }}"
+    slurm_partition_name: "{{ slurm_partition_name }}"
+{% raw %}
+    slurm_conf_file: /etc/slurm-llnl/slurm.conf
+    slurm_max_cpus: "{{ ansible_processor_vcpus }}"
+    update_on_change: true
+
+  tasks:
+
+    - name: Update SLURM configuration
+      blockinfile:
+        path: "{{ slurm_conf_file }}"
+        marker: "# {mark} ANSIBLE MANAGED NODES"
+        block: |
+          NodeName={{ slurm_hostname }} Sockets={{ ansible_processor_count }} CoresPerSocket={{ ansible_processor_cores }} ThreadsPerCore={{ ansible_processor_threads_per_core }} State=UNKNOWN
+          PartitionName={{ slurm_partition_name }} Nodes={{ slurm_hostname }} Default=YES MaxTime=INFINITE State=UP MaxNodes=1 MaxCPUsPerNode={{ slurm_max_cpus }}
+        backup: yes
+      register: update
+    
+    - name: Restart Slurm
+      when: update.changed and update_on_change
+      become: true
+      service:
+        name: "{{ item }}"
+        state: restarted
+      with_items:
+        - slurmctld
+        - slurmd
+{% endraw %}

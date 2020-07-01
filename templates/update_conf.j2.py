@@ -1,4 +1,6 @@
-#!/usr/bin/env python
+#!{{ ansible_python_interpreter | default('/usr/bin/python') }}
+from __future__ import print_function
+
 from difflib import context_diff
 import json
 import re

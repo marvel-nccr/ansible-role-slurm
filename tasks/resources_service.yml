@@ -1,0 +1,22 @@
+---
+# Adds a system service that re-configures the slurm compute resources on startup
+# Note: This is necessary when preparing image that can start on a different hardware than it was built on
+
+- name: copy init.d template
+  become: true
+  copy:
+    src: "set-resources.sh"
+    dest: "/etc/init.d/set-resources"
+    mode: 0755
+
+- name: enable service to set the slurm compute resources
+  become: true
+  command: update-rc.d set-resources defaults
+  args:
+    creates: "/etc/rc5.d/S??set-resources"
+
+- name: start service to set the slurm compute resources
+  become: true
+  service:
+    name: set-resources
+    state: started

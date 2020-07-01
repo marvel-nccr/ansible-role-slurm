@@ -10,6 +10,8 @@
   vars:
     - run_tests: true
     - cloud_platform: docker
+    - slurm_hostname_service: true
+    - slurm_resources_service: true
 
   roles:
     - role: marvel-nccr.slurm
