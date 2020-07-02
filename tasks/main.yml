@@ -1,4 +1,10 @@
 ---
+- name: add ansible repository
+  become: true
+  apt_repository:
+    repo: 'ppa:ansible/ansible'
+    state: present
+
 - name: Install apt packages
   become: true
   apt:
@@ -8,6 +14,7 @@
       - slurm-wlm-basic-plugins-dev
       - munge
       - sendmail
+      - ansible
     state: present
     update_cache: true
 
@@ -46,15 +53,17 @@
   register: conf_template
 
 - name: create confinguration update playbook
+  become: true
   template:
     src: config-playbook.yml.j2
     dest: /etc/slurm-llnl/update-playbook.yml
 
 - name: copy confinguration update executable
+  become: true
   copy:
     src: update-slurm-resources.sh
     dest: /usr/bin/slurm-update-resources
-    mode: u=rwx,g=rx
+    mode: u=rwx,g=rx,o=rx
 
 - include_tasks: resources_service.yml
   when: slurm_resources_service

@@ -1,6 +1,7 @@
 ---
 - name: run configuration update script
-  command: /usr/bin/slurm-update-resources
+  become: true
+  command: /usr/bin/slurm-update-resources -e restart_on_change=true
   changed_when: false
 
 - name: create test directory

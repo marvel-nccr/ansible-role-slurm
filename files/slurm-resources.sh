@@ -14,8 +14,9 @@ run_update ()
 {
 # TODO ideally we would also output stderr to the log file
 # but for some reason 2>&1 makes $* in slurm-update-resources also read the log path as a variable
-/usr/bin/slurm-update-resources -e update_on_change=false > /var/log/slurm-resources.log
-cat /var/log/slurm-resources.log
+export ANSIBLE_LOCAL_TEMP=$HOME/.ansible/tmp
+export ANSIBLE_REMOTE_TEMP=$HOME/.ansible/tmp
+/usr/bin/slurm-update-resources -v
 }
 
 case "$1" in

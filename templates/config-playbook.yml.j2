@@ -7,7 +7,8 @@
 {% raw %}
     slurm_conf_file: /etc/slurm-llnl/slurm.conf
     slurm_max_cpus: "{{ ansible_processor_vcpus }}"
-    update_on_change: true
+    restart_on_change: false
+    restart_slurm: false
 
   tasks:
 
@@ -15,6 +16,7 @@
         msg: "Run: {{ lookup('pipe', 'date +%Y-%m-%d-%H:%M:%S') }}"
 
     - name: Update SLURM configuration
+      become: true
       blockinfile:
         path: "{{ slurm_conf_file }}"
         marker: "# {mark} ANSIBLE MANAGED NODES"
@@ -25,7 +27,7 @@
       register: update
     
     - name: Restart Slurm
-      when: update.changed and update_on_change
+      when: (update.changed and restart_on_change | bool) or (restart_slurm | bool)
       become: true
       service:
         name: "{{ item }}"
