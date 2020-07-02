@@ -8,4 +8,4 @@ if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
   exit 0
 fi
 
-/usr/bin/ansible-playbook /etc/slurm-llnl/update-playbook.yml $1
+/usr/bin/ansible-playbook /etc/slurm-llnl/update-playbook.yml $*

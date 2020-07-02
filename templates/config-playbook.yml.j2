@@ -11,6 +11,9 @@
 
   tasks:
 
+    - debug:
+        msg: "Run: {{ lookup('pipe', 'date +%Y-%m-%d-%H:%M:%S') }}"
+
     - name: Update SLURM configuration
       blockinfile:
         path: "{{ slurm_conf_file }}"
