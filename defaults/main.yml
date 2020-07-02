@@ -1,6 +1,5 @@
 ---
 slurm_hostname: qmobile
-slurm_cpus: 2
 # Size of real memory on the node in megabytes
 slurm_memory: 1024
 slurm_user: slurm
@@ -12,3 +11,8 @@ slurm_test_folder: "/tmp/slurm-tests"
 # Adds a system service that forces the hostname on startup
 # Note: This is e.g. necessary on cloud platforms like AWS
 slurm_hostname_service: false
+slurm_set_hostname: false
+
+# Adds a system service that re-configures the slurm compute resources on startup
+# Note: This is necessary when preparing image that can start on a different hardware than it was built on
+slurm_resources_service: false
