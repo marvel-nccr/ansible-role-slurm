@@ -25,11 +25,14 @@ jobs:
 
     strategy:
       matrix:
-        # ubuntu-16.04, ubuntu-18.04
-        docker-version: ["1.1", "2.2"]
+        include:
+        - os: ubuntu-16.04
+          docker-version: "1.1"
+        - os: ubuntu-18.04
+          docker-version: "2.2"
       fail-fast: false
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     steps:
 
@@ -48,7 +51,9 @@ jobs:
         pip --version
 
     - name: Install requirements
-      run: pip install -r requirements.txt
+      run: |
+        pip install wheel
+        pip install -r requirements.txt
       working-directory: ${{ env.galaxy-name }}
 
     - name: Run molecule
