@@ -40,6 +40,9 @@ jobs:
       with:
         path: ${{ env.galaxy-name }}
 
+    - name: install docker
+      run: sudo apt install docker
+
     - name: Set up Python 3.8
       uses: actions/setup-python@v2
       with:
