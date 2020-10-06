@@ -1,17 +1,16 @@
----
 - hosts: all
 
   pre_tasks:
-    - name: Update apt cache.
-      become: true
-      apt: update_cache=yes cache_valid_time=600
-      when: ansible_os_family == 'Debian'
+  - name: Update apt cache.
+    become: true
+    apt: update_cache=yes cache_valid_time=600
+    when: ansible_os_family == 'Debian'
 
   vars:
-    - run_tests: true
-    - cloud_platform: docker
-    - slurm_hostname_service: true
-    - slurm_resources_service: true
+  - run_tests: true
+  - cloud_platform: docker
+  - slurm_hostname_service: true
+  - slurm_resources_service: true
 
   roles:
-    - role: marvel-nccr.slurm
+  - role: marvel-nccr.slurm

@@ -1,18 +1,13 @@
----
 dependency:
   name: galaxy
 driver:
   name: docker
-lint: |
-  set -e
-  yamllint .
-  ansible-lint
 platforms:
-  - name: instance
-    image: "${DOCKER_IMAGE:-marvelnccr/ubuntu-docker-base}:${DOCKER_IMAGE_VERSION:-latest}"
-    command: "${DOCKER_COMMAND:-sleep infinity}"
-    privileged: true
-    pre_build_image: true
+- name: instance
+  image: "${DOCKER_IMAGE:-marvelnccr/ubuntu-docker-base}:${DOCKER_IMAGE_VERSION:-latest}"
+  command: "${DOCKER_COMMAND:-sleep infinity}"
+  privileged: true
+  pre_build_image: true
 provisioner:
   name: ansible
   playbooks:

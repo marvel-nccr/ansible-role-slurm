@@ -1,4 +1,3 @@
----
 # Adds a system service that forces the hostname on startup
 # Note: This is necessary when preparing images for cloud platforms like AWS
 

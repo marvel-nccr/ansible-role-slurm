@@ -1,6 +1,10 @@
 ---
 extends: default
 rules:
+  document-start: disable
   line-length:
     max: 200
     level: warning
+  indentation:
+    spaces: 2
+    indent-sequences: false

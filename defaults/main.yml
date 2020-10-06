@@ -1,4 +1,3 @@
----
 slurm_hostname: qmobile
 # Size of real memory on the node in megabytes
 slurm_memory: 1024

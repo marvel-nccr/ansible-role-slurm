@@ -1,4 +1,3 @@
----
 # Adds a system service that re-configures the slurm compute resources on startup
 # Note: This is necessary when preparing image that can start on a different hardware than it was built on
 

@@ -1,4 +1,3 @@
----
 - name: run configuration update script
   become: true
   command: /usr/bin/slurm-update-resources -e restart_on_change=true
@@ -15,8 +14,8 @@
     dest: "{{ slurm_test_folder }}"
     mode: u=rwx,g=rx
   with_items:
-    - test-submit.sh
-    - job.sh
+  - test-submit.sh
+  - job.sh
 
 # in case the node is stuck in state "drain", recover via
 # sudo -su slurm scontrol

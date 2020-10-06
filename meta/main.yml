@@ -1,4 +1,3 @@
----
 allow_duplicates: false
 
 galaxy_info:
@@ -9,10 +8,10 @@ galaxy_info:
   license: MIT
   min_ansible_version: 2.7
   platforms:
-    - name: Ubuntu
-      versions:
-        - bionic
+  - name: Ubuntu
+    versions:
+    - bionic
   galaxy_tags:
-    - ubuntu
-    - application
-    - science
+  - ubuntu
+  - application
+  - science
