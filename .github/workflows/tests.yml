@@ -5,6 +5,9 @@ on:
     - 'v*'
   pull_request:
 
+env:
+  galaxy-name: marvel-nccr.slurm
+
 jobs:
 
   pre-commit:
@@ -32,7 +35,7 @@ jobs:
 
     - uses: actions/checkout@v2
       with:
-        path: marvel-nccr.slurm
+        path: ${{ env.galaxy-name }}
 
     - name: Set up Python 3.8
       uses: actions/setup-python@v2
@@ -46,9 +49,11 @@ jobs:
 
     - name: Install requirements
       run: pip install -r requirements.txt
+      working-directory: ${{ env.galaxy-name }}
 
     - name: Run molecule
       run: molecule test
+      working-directory: ${{ env.galaxy-name }}
       env:
         DOCKER_IMAGE: marvelnccr/ubuntu-docker-base
         DOCKER_IMAGE_VERSION: ${{ matrix.docker-version }}
