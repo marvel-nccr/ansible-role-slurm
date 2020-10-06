@@ -9,6 +9,12 @@
       cache_valid_time: 600
     when: ansible_os_family == 'Debian'
 
+  - name: Enable dbus
+    service:
+      name: "dbus.service"
+      enabled: yes
+    when: ansible_os_family == 'Debian'
+
   vars:
   - run_tests: true
   - cloud_platform: docker
