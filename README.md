@@ -43,6 +43,12 @@ pip install pre-commit
 pre-commit run -all
 ```
 
+## Deployment
+
+Deployment to Ansible Galaxy is automated *via* GitHub Actions.
+Simply tag a release `vX.Y.Z` to initiate the CI and release workflow.
+Note, the release will only complete if the CI tests pass.
+
 ## License
 
 MIT
