@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/marvel-nccr/ansible-role-slurm.svg?branch=master)](https://travis-ci.org/marvel-nccr/ansible-role-slurm)
+[![CI](https://github.com/marvel-nccr/ansible-role-slurm/workflows/CI/badge.svg)](https://github.com/marvel-nccr/ansible-role-slurm/actions)
+[![Galaxy](https://img.shields.io/badge/Galaxy-marvel--nccr.slurm-blue)](https://galaxy.ansible.com/marvel-nccr/slurm)
 
 # Ansible Role: marvel-nccr.slurm
 
@@ -31,6 +32,15 @@ Docker for tests. Once Docker is installed, run tests using
 ```bash
 pip install -r requirements.txt
 molecule test
+```
+
+## Code style
+
+Code style is formatted and linted with [pre-commit](https://pre-commit.com/).
+
+```bash
+pip install pre-commit
+pre-commit run -all
 ```
 
 ## License

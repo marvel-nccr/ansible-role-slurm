@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+    tags:
+    - 'v*'
+  pull_request:
+
+env:
+  galaxy-name: marvel-nccr.slurm
+
+jobs:
+
+  pre-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
+    - uses: pre-commit/action@v2.0.0
+
+  molecule:
+
+    strategy:
+      matrix:
+        include:
+        - os: ubuntu-16.04
+          docker-version: "1.1"
+        - os: ubuntu-18.04
+          docker-version: "2.2"
+      fail-fast: false
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+
+    - uses: actions/checkout@v2
+      with:
+        path: ${{ env.galaxy-name }}
+
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Upgrade pip
+      run: |
+        pip install --upgrade pip
+        pip --version
+
+    - name: Install requirements
+      run: |
+        pip install wheel
+        pip install -r requirements.txt
+      working-directory: ${{ env.galaxy-name }}
+
+    - name: Run molecule
+      run: molecule test
+      working-directory: ${{ env.galaxy-name }}
+      env:
+        DOCKER_IMAGE: marvelnccr/ubuntu-docker-base
+        DOCKER_IMAGE_VERSION: ${{ matrix.docker-version }}
+
+  release:
+    name: Publish to ansible-galaxy
+    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
+    needs: [pre-commit, molecule]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: robertdebock/galaxy-action@1.0.3
+      with:
+        galaxy_api_key: ${{ secrets.GALAXY_API_KEY }}
