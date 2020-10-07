@@ -34,6 +34,15 @@ pip install -r requirements.txt
 molecule test
 ```
 
+## Code style
+
+Code style is formatted and linted with [pre-commit](https://pre-commit.com/).
+
+```bash
+pip install pre-commit
+pre-commit run -all
+```
+
 ## License
 
 MIT
