@@ -1,3 +1,5 @@
+name: CI
+
 on:
   push:
     branches: [master]
@@ -62,3 +64,14 @@ jobs:
       env:
         DOCKER_IMAGE: marvelnccr/ubuntu-docker-base
         DOCKER_IMAGE_VERSION: ${{ matrix.docker-version }}
+
+  release:
+    name: Publish to ansible-galaxy
+    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
+    needs: [pre-commit, molecule]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: robertdebock/galaxy-action@1.0.3
+      with:
+        galaxy_api_key: ${{ secrets.GALAXY_API_KEY }}
