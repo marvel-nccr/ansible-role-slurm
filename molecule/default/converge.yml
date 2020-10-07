@@ -4,16 +4,27 @@
   - name: Update apt cache.
     become: true
     apt:
-      name: dbus
       update_cache: yes
       cache_valid_time: 600
     when: ansible_os_family == 'Debian'
 
-  - name: Enable dbus
-    service:
-      name: "dbus.service"
-      enabled: yes
+  - name: Install dbus
+    apt:
+      name: "dbus"
+      state: present
     when: ansible_os_family == 'Debian'
+
+  # - name: Enable dbus
+  #   service:
+  #     name: "dbus.service"
+  #     enabled: yes
+  #   when: ansible_os_family == 'Debian'
+
+  - name: Enable dbus
+    systemd:
+      name: dbus.service
+      state: started
+      enabled: yes
 
   vars:
   - run_tests: true
