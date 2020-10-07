@@ -9,28 +9,6 @@
       cache_valid_time: 600
     when: ansible_os_family == 'Debian'
 
-  - name: Install dbus
-    apt:
-      name: "dbus"
-      state: present
-    when: ansible_os_family == 'Debian'
-
-  # - name: Just force systemd to reread configs (2.4 and above)
-  #   systemd:
-  #     daemon_reload: yes
-
-  # - name: Enable dbus
-  #   service:
-  #     name: "dbus.service"
-  #     enabled: yes
-  #   when: ansible_os_family == 'Debian'
-
-  - name: Enable dbus
-    systemd:
-      name: dbus.service
-      # state: started
-      enabled: yes
-
   vars:
   - run_tests: true
   - cloud_platform: docker

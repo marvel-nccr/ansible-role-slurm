@@ -2,6 +2,7 @@
   become: true
   hostname:
     name: "{{ slurm_hostname }}"
+  when: not (cloud_platform is defined and cloud_platform == 'docker')
 
 # Yaml requires escaping backslashes in double quotes but not in single quotes
 # This works for docker, both locally and on travis
