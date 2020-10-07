@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/marvel-nccr/ansible-role-slurm.svg?branch=master)](https://travis-ci.org/marvel-nccr/ansible-role-slurm)
+[![CI](https://github.com/marvel-nccr/ansible-role-slurm/workflows/CI/badge.svg)](https://github.com/marvel-nccr/ansible-role-slurm/actions)
+[![Galaxy](https://img.shields.io/badge/Galaxy-marvel--nccr.slurm-blue)](https://galaxy.ansible.com/marvel-nccr/slurm)
 
 # Ansible Role: marvel-nccr.slurm
 
