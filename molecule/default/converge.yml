@@ -1,6 +1,7 @@
 - hosts: all
 
   pre_tasks:
+
   - name: Update apt cache.
     become: true
     apt:
@@ -14,6 +15,10 @@
       state: present
     when: ansible_os_family == 'Debian'
 
+  # - name: Just force systemd to reread configs (2.4 and above)
+  #   systemd:
+  #     daemon_reload: yes
+
   # - name: Enable dbus
   #   service:
   #     name: "dbus.service"
@@ -23,7 +28,7 @@
   - name: Enable dbus
     systemd:
       name: dbus.service
-      state: started
+      # state: started
       enabled: yes
 
   vars:
