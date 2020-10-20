@@ -17,5 +17,3 @@ repos:
   rev: v4.3.5
   hooks:
   - id: ansible-lint
-    # TODO File permissions unset or incorrect
-    args: [-x, "208"]
