@@ -1,16 +1,17 @@
 [![CI](https://github.com/marvel-nccr/ansible-role-slurm/workflows/CI/badge.svg)](https://github.com/marvel-nccr/ansible-role-slurm/actions)
-[![Galaxy](https://img.shields.io/badge/Galaxy-marvel--nccr.slurm-blue)](https://galaxy.ansible.com/marvel-nccr/slurm)
+[![Ansible Role](https://img.shields.io/ansible/role/30201.svg)](https://galaxy.ansible.com/marvel-nccr/slurm)
+[![Release](https://img.shields.io/github/tag/marvel-nccr/ansible-role-slurm.svg)](https://github.com/marvel-nccr/ansible-role-slurm/releases)
 
 # Ansible Role: marvel-nccr.slurm
 
 An Ansible role that installs the [slurm](https://slurm.schedmd.com/) workload manager on Ubuntu.
 
+**NOTE!** It is important that the hostname is properly set in the machine
+(both with `hostname <HOSTNAME>` and in the `/etc/hosts/` file, in the line with the IP address (e.g. in docker this line should read `172.17.0.2 <HOSTNAME>`, where `<HOSTNAME>` should be replaced with the hostname, and should match the variable `slurm_hostname` (default value: `qmobile`).
+
 ## Installation
 
 `ansible-galaxy install marvel-nccr.slurm`
-
-**NOTE!** It is important that the hostname is properly set in the machine
-(both with `hostname <HOSTNAME>` and in the `/etc/hosts/` file, in the line with the IP address (e.g. in docker this line should read `172.17.0.2 <HOSTNAME>`, where `<HOSTNAME>` should be replaced with the hostname, and should match the variable `slurm_hostname` (default value: `qmobile`).
 
 ## Role Variables
 
@@ -18,20 +19,37 @@ See `defaults/main.yml`
 
 ## Example Playbook
 
-```
-- hosts: machines
+```yaml
+- hosts: servers
   roles:
-  - role: nccr-marvel.slurm
+  - role: marvel-nccr.slurm
 ```
 
-## Tests
+## Development and testing
 
-This role uses [Molecule](https://molecule.readthedocs.io/en/latest/#) and
-Docker for tests. Once Docker is installed, run tests using
+This role uses [Molecule](https://molecule.readthedocs.io/en/latest/#) and [Docker](https://www.docker.com/) for tests.
+
+After installing [Docker](https://www.docker.com/):
+
+Clone the repository into a package named `marvel-nccr.slurm` (the folder must be named the same as the Ansible Galaxy name)
 
 ```bash
-pip install -r requirements.txt
-molecule test
+git clone https://github.com/marvel-nccr/ansible-role-slurm marvel-nccr.slurm
+cd marvel-nccr.slurm
+```
+
+Then run:
+
+```bash
+pip install -r requirements.txt  # Installs molecule
+molecule test  # runs tests
+```
+
+or use tox (see `tox.ini`):
+
+```bash
+pip install tox
+tox
 ```
 
 ## Code style

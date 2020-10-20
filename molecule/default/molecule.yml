@@ -1,16 +1,22 @@
 dependency:
   name: galaxy
+#   requirements_file: molecule/default/requirements.yml
 driver:
   name: docker
 platforms:
 - name: instance
-  image: "${DOCKER_IMAGE:-marvelnccr/ubuntu-docker-base}:${DOCKER_IMAGE_VERSION:-latest}"
-  command: "${DOCKER_COMMAND:-sleep infinity}"
+  image: "marvelnccr/docker-${MOLECULE_DISTRO:-ubuntu1804}-ansible:latest"
+  command: "${MOLECULE_DOCKER_COMMAND:-sleep infinity}"
+  volumes:
+  - /sys/fs/cgroup:/sys/fs/cgroup:ro
   privileged: true
   pre_build_image: true
+  env:
+    LC_ALL: "en_US.UTF-8"
+    LANG: "en_US.UTF-8"
 provisioner:
   name: ansible
   playbooks:
     converge: converge.yml
-  options:
-    v: true
+# Remove Ansible no_log settings for debugging
+# log: true

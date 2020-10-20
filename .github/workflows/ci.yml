@@ -8,7 +8,7 @@ on:
   pull_request:
 
 env:
-  galaxy-name: marvel-nccr.slurm
+  galaxy-name: "marvel-nccr.slurm"
 
 jobs:
 
@@ -27,14 +27,10 @@ jobs:
 
     strategy:
       matrix:
-        include:
-        - os: ubuntu-16.04
-          docker-version: "1.1"
-        - os: ubuntu-18.04
-          docker-version: "2.2"
+        distro: [ubuntu1804, ubuntu2004]
       fail-fast: false
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     steps:
 
@@ -62,8 +58,7 @@ jobs:
       run: molecule test
       working-directory: ${{ env.galaxy-name }}
       env:
-        DOCKER_IMAGE: marvelnccr/ubuntu-docker-base
-        DOCKER_IMAGE_VERSION: ${{ matrix.docker-version }}
+        MOLECULE_DISTRO: ${{ matrix.distro }}
 
   release:
     name: Publish to ansible-galaxy

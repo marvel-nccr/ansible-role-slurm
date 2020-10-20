@@ -1,3 +1,10 @@
+- name: Install dirmngr
+  become: true
+  apt:
+    name: dirmngr
+    state: present
+    update_cache: true
+
 - name: add ansible repository
   become: true
   apt_repository:
