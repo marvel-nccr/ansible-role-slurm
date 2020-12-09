@@ -1,0 +1,13 @@
+- hosts: all
+
+  tasks:
+  # normally only started on init
+  - name: check starting slurm-resources
+    become: true
+    systemd:
+      name: slurm-resources.service
+      state: started
+
+  - name: check running slurm-resources script
+    command: slurm-resources -e restart_slurm=true -e slurm_max_cpus=2
+    changed_when: false

@@ -1,6 +1,4 @@
 slurm_hostname: qmobile
-# Size of real memory on the node in megabytes
-slurm_memory: 1024
 slurm_user: slurm
 slurm_cluster_name: "{{ slurm_hostname }}"
 slurm_partition_name: jobs
@@ -12,6 +10,6 @@ slurm_test_folder: "/tmp/slurm-tests"
 slurm_hostname_service: false
 slurm_set_hostname: false
 
-# Adds a system service that re-configures the slurm compute resources on startup
-# Note: This is necessary when preparing image that can start on a different hardware than it was built on
-slurm_resources_service: false
+# Enables the slurm-resources system service that re-configures the slurm compute resources on startup
+# This is necessary when preparing image that can start on a different hardware than it was built on
+slurm_resources_service_enabled: true
