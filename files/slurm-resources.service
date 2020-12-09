@@ -1,6 +1,6 @@
 [Unit]
 Description=Set SLURM compute resources
-Before=slurmctld.target slurmd.target
+Before=slurmctld.service slurmd.service
 ConditionPathExists=/etc/slurm-llnl/update-playbook.yml
 
 [Service]
