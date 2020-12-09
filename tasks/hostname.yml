@@ -7,11 +7,12 @@
   when: not (cloud_platform is defined and cloud_platform == 'docker')
 
 # Yaml requires escaping backslashes in double quotes but not in single quotes
-# This works for docker, both locally and on travis
+# This usually works for docker, but it is not ideal
+# Its better to set the hostname when starting the docker container (available as an option)
 - name: Set hostname in /etc/hosts
   lineinfile:
     path: /etc/hosts
-    regexp: "^(172\\.17\\.[0-9]+\\.[0-9]+)\\s+.*$"
+    regexp: "^(172\\.[0-9]+\\.[0-9]+\\.[0-9]+)\\s+.*$"
     line: "\\1 {{ slurm_hostname }}"
     backrefs: true
     unsafe_writes: true

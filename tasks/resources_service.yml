@@ -1,21 +1,32 @@
 # Adds a system service that re-configures the slurm compute resources on startup
 # Note: This is necessary when preparing image that can start on a different hardware than it was built on
 
-- name: copy init.d template
+- name: create configuration update playbook
+  become: true
+  template:
+    src: config-playbook.yml.j2
+    dest: /etc/slurm-llnl/update-playbook.yml
+
+- name: copy confinguration update executable
   become: true
   copy:
-    src: "slurm-resources.sh"
-    dest: "/etc/init.d/slurm-resources"
-    mode: 0755
+    src: slurm-resources.sh
+    dest: /usr/bin/slurm-resources
+    mode: u=rwx,g=rx,o=rx
 
-- name: enable service to set the slurm compute resources
+- name: Add slurm-resources as system service
   become: true
-  command: update-rc.d slurm-resources defaults
-  args:
-    creates: "/etc/rc5.d/S??slurm-resources"
+  copy:
+    src: slurm-resources.service
+    dest: /etc/systemd/system
+    owner: "{{ root_user | default('root') }}"
+    group: "{{ root_user | default('root') }}"
+    mode: 0644
+  when: ansible_service_mgr == "systemd"
 
-- name: start service to set the slurm compute resources
+- name: Setup slurm-resources system service (systemd)
   become: true
-  service:
-    name: slurm-resources
-    state: started
+  systemd:
+    name: slurm-resources.service
+    enabled: "{{ slurm_resources_service_enabled }}"
+  when: ansible_service_mgr == "systemd"

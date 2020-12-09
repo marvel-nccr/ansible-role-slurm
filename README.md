@@ -6,8 +6,9 @@
 
 An Ansible role that installs the [slurm](https://slurm.schedmd.com/) workload manager on Ubuntu.
 
-**NOTE!** It is important that the hostname is properly set in the machine
-(both with `hostname <HOSTNAME>` and in the `/etc/hosts/` file, in the line with the IP address (e.g. in docker this line should read `172.17.0.2 <HOSTNAME>`, where `<HOSTNAME>` should be replaced with the hostname, and should match the variable `slurm_hostname` (default value: `qmobile`).
+**NOTE!**
+It is important that the hostname is properly set in the machine
+(both with `hostname <HOSTNAME>` (which sets `/etc/hostname`) and in the `/etc/hosts` file, in the line with the IP address (e.g. in docker this line should read `172.x.x.x <HOSTNAME>`, where `<HOSTNAME>` should be replaced with the hostname, and should match the variable `slurm_hostname` (default value: `qmobile`).
 
 ## Installation
 

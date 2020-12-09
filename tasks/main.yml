@@ -14,6 +14,8 @@
 - name: Install apt packages
   become: true
   apt:
+    update_cache: true
+    cache_valid_time: 86400
     name:
     - slurm-wlm
     - slurm-wlm-basic-plugins
@@ -21,8 +23,6 @@
     - munge
     - sendmail
     - ansible
-    state: present
-    update_cache: true
 
 - name: hide slurm user (created by slurm package) on login screens
   become: true
@@ -58,21 +58,7 @@
     dest: /etc/slurm-llnl/slurm.conf
   register: conf_template
 
-- name: create confinguration update playbook
-  become: true
-  template:
-    src: config-playbook.yml.j2
-    dest: /etc/slurm-llnl/update-playbook.yml
-
-- name: copy confinguration update executable
-  become: true
-  copy:
-    src: update-slurm-resources.sh
-    dest: /usr/bin/slurm-update-resources
-    mode: u=rwx,g=rx,o=rx
-
 - include_tasks: resources_service.yml
-  when: slurm_resources_service
 
 # munge key already created by apt-get install
 # will not overwrite key due to 'creates' flag
