@@ -2,7 +2,6 @@
   hosts: localhost
 
   vars:
-    slurm_hostname: "{{ slurm_hostname }}"
     slurm_partition_name: "{{ slurm_partition_name }}"
 {% raw %}
     slurm_conf_file: /etc/slurm-llnl/slurm.conf
@@ -15,14 +14,22 @@
     - debug:
         msg: "Run: {{ lookup('pipe', 'date +%Y-%m-%d-%H:%M:%S') }}"
 
-    - name: Update SLURM configuration
+    - name: "Update SLURM ControlMachine={{ ansible_hostname }}"
+      become: true
+      lineinfile:
+        dest: "{{ slurm_conf_file }}"
+        regexp: '^ControlMachine='
+        line: "ControlMachine={{ ansible_hostname }}"
+        state: present
+
+    - name: Update SLURM node configuration
       become: true
       blockinfile:
         path: "{{ slurm_conf_file }}"
         marker: "# {mark} ANSIBLE MANAGED NODES"
         block: |
-          NodeName={{ slurm_hostname }} Sockets={{ ansible_processor_count }} CoresPerSocket={{ ansible_processor_cores }} ThreadsPerCore={{ ansible_processor_threads_per_core }} State=UNKNOWN
-          PartitionName={{ slurm_partition_name }} Nodes={{ slurm_hostname }} Default=YES MaxTime=INFINITE State=UP MaxNodes=1 MaxCPUsPerNode={{ slurm_max_cpus }}
+          NodeName={{ ansible_hostname }} Sockets={{ ansible_processor_count }} CoresPerSocket={{ ansible_processor_cores }} ThreadsPerCore={{ ansible_processor_threads_per_core }} State=UNKNOWN
+          PartitionName={{ slurm_partition_name }} Nodes={{ ansible_hostname }} Default=YES MaxTime=INFINITE State=UP MaxNodes=1 MaxCPUsPerNode={{ slurm_max_cpus }}
         backup: yes
       register: update
     

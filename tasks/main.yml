@@ -75,11 +75,6 @@
   args:
     creates: "/etc/munge/munge.key"
 
-- import_tasks: hostname.yml
-
-- include_tasks: hostname_service.yml
-  when: slurm_hostname_service
-
 # munge should start before slurm daemons
 # https://slurm.schedmd.com/quickstart_admin.html
 - name: start munge service
