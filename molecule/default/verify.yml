@@ -1,6 +1,14 @@
 - hosts: all
 
   tasks:
+  - name: Get slurm version
+    command: sinfo -V
+    changed_when: false
+    register: slurm_version
+
+  - debug:
+      var: slurm_version.stdout
+
   # normally only started on init
   - name: check starting slurm-resources
     become: true

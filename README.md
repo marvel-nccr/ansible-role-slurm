@@ -4,7 +4,49 @@
 
 # Ansible Role: marvel-nccr.slurm
 
-An Ansible role that installs the [slurm](https://slurm.schedmd.com/) workload manager on Ubuntu.
+An Ansible role that installs the [slurm](https://slurm.schedmd.com/) workload manager on Ubuntu (tested on 16.04, 18.04 and 20.04).
+
+The role:
+
+- Installs the slurm packages
+- Sets the hostname to be that defined in `slurm_hostname`
+- If `slurm_hostname_service: true` adds a service to set the hostname on VM start-up (required for cloud platforms)
+- Sets up the slurm configuration (`/etc/slurm-llnl/slurm.conf`) to dynamically use the correct platform resources (#CPUs, etc), configuring one node and one partition.
+- Adds a `slurm-resources` script and start-up service to automate the initiation of correct platform resources (required if creating a VM instance with different resources to the build VM image)
+- Starts the slurm services.
+
+To check the services are running (assuming systemd in use):
+
+```console
+$ systemctl --type=service
+...
+slurmctld.service                  loaded active running Slurm controller daemon
+slurmd.service                     loaded active running Slurm node daemon
+...
+```
+
+To check the slurm node/partition:
+
+```console
+$ scontrol show node
+$ scontrol show partition
+```
+
+This should match the resources given in `lscpu`.
+
+To enable/disable the `slurm-resources` start up service:
+
+```console
+$ systemctl enable slurm-resources
+```
+
+To alter the resources configuration of slurm directly, you can use e.g.:
+
+```console
+$ slurm-resources -e restart_on_change=true -e slurm_max_cpus=2
+```
+
+This will update the resources defined for the node, set the maximum CPUs for the partition to 2 (independent of the CPUs available on the node), and restart the slurm services with the updated configuration (if the configuration has changed).
 
 **NOTE!**
 It is important that the hostname is properly set in the machine

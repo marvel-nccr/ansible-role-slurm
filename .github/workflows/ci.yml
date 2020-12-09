@@ -27,7 +27,7 @@ jobs:
 
     strategy:
       matrix:
-        distro: [ubuntu1604, ubuntu1804]
+        distro: [ubuntu1604, ubuntu1804, ubuntu2004]
       fail-fast: false
 
     runs-on: ubuntu-latest

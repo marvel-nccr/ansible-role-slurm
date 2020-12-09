@@ -6,6 +6,8 @@
     update_cache: true
 
 - name: add ansible repository
+  # ansible directly available in ubuntu 20.04: https://github.com/ansible/ansible/pull/69161
+  when: ansible_facts['distribution_major_version'] | int < 20
   become: true
   apt_repository:
     repo: 'ppa:ansible/ansible'
@@ -56,6 +58,10 @@
     src: slurm.conf
     owner: "{{ slurm_user }}"
     dest: /etc/slurm-llnl/slurm.conf
+  vars:
+    # must match those defined in the .service files
+    # changed from surm version 17 -> 19
+    slurm_pid_dir: "{{ '/var/run/slurm-llnl' if ansible_facts['distribution_major_version'] | int < 20 else '/run' }}"
   register: conf_template
 
 - include_tasks: resources_service.yml
