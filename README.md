@@ -6,6 +6,9 @@
 
 An Ansible role that installs the [slurm](https://slurm.schedmd.com/) workload manager on Ubuntu (tested on 16.04, 18.04 and 20.04).
 
+Note: This role configures the machine on which slurm is running to also be the compute node (it thus contains e.g. some autodetection capability around #CPUs on the machine it is being run on).
+So far the role is not yet designed to set up a compute cluster with multiple nodes, for this see e.g. tools like https://github.com/elasticluster/elasticluster.
+
 The role:
 
 - Installs the slurm packages
