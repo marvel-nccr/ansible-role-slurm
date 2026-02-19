@@ -18,20 +18,14 @@ platforms:
     LANG: "en_US.UTF-8"
 provisioner:
   name: ansible
-  # log: true  # for debugging
+  # log: true  # use for debugging
   playbooks:
     converge: converge.yml
-    verify: verify.yml
   config_options:
     defaults:
       # nicer stdout printing
-      stdout_callback: yaml
+      stdout_callback: default
+      result_format: yaml
       bin_ansible_callbacks: true
       # add timing to tasks
       callback_whitelist: profile_tasks
-  inventory:
-    hosts:
-      all:
-        vars:
-          ansible_python_interpreter: /usr/bin/python3
-          run_tests: true
