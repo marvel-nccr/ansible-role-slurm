@@ -69,4 +69,4 @@ jobs:
     - uses: actions/checkout@v4
     - uses: robertdebock/galaxy-action@1.2.1
       with:
-        galaxy_api_key: ${{ secrets.GALAXY_API_KEY }}
+        galaxy_api_key: ${{ secrets.GALAXY_TOKEN_MBERCX }}
