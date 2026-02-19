@@ -4,7 +4,7 @@
   vars:
     slurm_partition_name: "{{ slurm_partition_name }}"
 {% raw %}
-    slurm_conf_file: /etc/slurm-llnl/slurm.conf
+    slurm_conf_file: /etc/slurm/slurm.conf
     slurm_max_cpus: "{{ ansible_processor_vcpus }}"
     restart_on_change: false
     restart_slurm: false

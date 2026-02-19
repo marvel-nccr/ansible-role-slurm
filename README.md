@@ -12,7 +12,7 @@ So far the role is not yet designed to set up a compute cluster with multiple no
 The role:
 
 - Installs the slurm packages
-- Sets up the slurm configuration (`/etc/slurm-llnl/slurm.conf`) to dynamically use the correct platform resources (hostname, #CPUs, etc), configuring one node (named `$HOSTNAME`) and one partition (named `slurm_partition_name`).
+- Sets up the slurm configuration (`/etc/slurm/slurm.conf`) to dynamically use the correct platform resources (hostname, #CPUs, etc), configuring one node (named `$HOSTNAME`) and one partition (named `slurm_partition_name`).
 - Adds a `slurm-resources` script and start-up service to automate the initiation of correct platform resources (required if creating a VM image where instances may have different resources)
 - Starts the slurm services.
 

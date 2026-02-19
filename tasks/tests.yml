@@ -25,3 +25,7 @@
   command: "{{ slurm_test_folder }}/test-submit.sh"
   args:
     creates: "{{ slurm_test_folder }}/test1/output.txt"
+  retries: 3
+  delay: 10
+  register: result
+  until: result.rc == 0

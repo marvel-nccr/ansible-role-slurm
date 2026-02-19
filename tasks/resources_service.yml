@@ -5,9 +5,9 @@
   become: true
   template:
     src: config-playbook.yml.j2
-    dest: /etc/slurm-llnl/update-playbook.yml
+    dest: /etc/slurm/update-playbook.yml
 
-- name: copy confinguration update executable
+- name: copy configuration update executable
   become: true
   copy:
     src: slurm-resources.sh

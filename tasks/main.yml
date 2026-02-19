@@ -34,34 +34,16 @@
     option: "SystemAccount"
     value: "true"
 
-- name: create directories for slurm
-  become: true
-  file:
-    path: "{{ item }}"
-    state: directory
-    owner: "{{ slurm_user }}"
-  with_items:
-  - /var/run/slurm-llnl
-  - /var/lib/slurm-llnl/slurmd
-  - /var/lib/slurm-llnl/slurmctld
-  - /var/log/slurm-llnl
-    # See issue and comments therein
-    # https://github.com/Azure/azure-quickstart-templates/issues/1796
-  - /var/spool/slurmd
-
-# Used configurator for generating file
-# (make sure to select the correct SLURM version!)
+# You can use the configurator for generating a config file (make sure to select the correct SLURM version!):
 # https://slurm.schedmd.com/configurator.html
-- name: Copy slurm configuration template
+- name: Copy slurm configuration template to slurm folder
   become: true
   template:
     src: slurm.conf
+    dest: /etc/slurm/slurm.conf
     owner: "{{ slurm_user }}"
-    dest: /etc/slurm-llnl/slurm.conf
   vars:
-    # must match those defined in the .service files
-    # changed from surm version 17 -> 19
-    slurm_pid_dir: "{{ '/var/run/slurm-llnl' if ansible_facts['distribution_major_version'] | int < 20 else '/run' }}"
+    slurm_pid_dir: /run
   register: conf_template
 
 - include_tasks: resources_service.yml
