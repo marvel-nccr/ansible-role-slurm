@@ -5,14 +5,6 @@
     state: present
     update_cache: true
 
-- name: Add ansible repository
-  # ansible directly available in ubuntu 20.04: https://github.com/ansible/ansible/pull/69161
-  when: ansible_facts['distribution_major_version'] | int < 20
-  become: true
-  ansible.builtin.apt_repository:
-    repo: 'ppa:ansible/ansible'
-    state: present
-
 - name: Install apt packages
   become: true
   ansible.builtin.apt:
