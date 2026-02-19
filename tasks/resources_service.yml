@@ -5,7 +5,7 @@
   become: true
   ansible.builtin.template:
     src: config-playbook.yml.j2
-    dest: /etc/slurm-llnl/update-playbook.yml
+    dest: /etc/slurm/update-playbook.yml
     mode: "0644"
 
 - name: Copy configuration update executable

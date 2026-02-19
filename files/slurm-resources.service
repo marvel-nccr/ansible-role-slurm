@@ -1,13 +1,13 @@
 [Unit]
 Description=Set SLURM compute resources
 Before=slurmctld.service slurmd.service
-ConditionPathExists=/etc/slurm-llnl/update-playbook.yml
+ConditionPathExists=/etc/slurm/update-playbook.yml
 
 [Service]
 Type=oneshot
 Environment=ANSIBLE_LOCAL_TEMP=%h/.ansible/tmp
 Environment=ANSIBLE_REMOTE_TEMP=%h/.ansible/tmp
-ExecStart=/usr/bin/ansible-playbook /etc/slurm-llnl/update-playbook.yml -v
+ExecStart=/usr/bin/ansible-playbook /etc/slurm/update-playbook.yml -v
 TimeoutStartSec=300
 
 StandardOutput=syslog
