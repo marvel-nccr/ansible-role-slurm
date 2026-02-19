@@ -1,15 +1,16 @@
-- name: run configuration update script
+- name: Run configuration update script
   become: true
-  command: /usr/bin/slurm-resources -e restart_on_change=true
+  ansible.builtin.command: /usr/bin/slurm-resources -e restart_on_change=true
   changed_when: false
 
-- name: create test directory
-  file:
+- name: Create test directory
+  ansible.builtin.file:
     path: "{{ slurm_test_folder }}"
     state: directory
+    mode: "0755"
 
-- name: copy test submission files
-  copy:
+- name: Copy test submission files
+  ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ slurm_test_folder }}"
     mode: u=rwx,g=rx
@@ -21,7 +22,7 @@
 # sudo -su slurm scontrol
 # scontrol: update NodeName=qmobile State=DOWN Reason="undraining"
 # scontrol: update NodeName=qmobile State=RESUME
-- name: do test submission
-  command: "{{ slurm_test_folder }}/test-submit.sh"
+- name: Do test submission
+  ansible.builtin.command: "{{ slurm_test_folder }}/test-submit.sh"
   args:
     creates: "{{ slurm_test_folder }}/test1/output.txt"

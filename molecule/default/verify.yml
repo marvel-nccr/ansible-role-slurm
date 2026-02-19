@@ -1,21 +1,23 @@
-- hosts: all
+- name: Verify
+  hosts: all
 
   tasks:
   - name: Get slurm version
-    command: sinfo -V
+    ansible.builtin.command: sinfo -V
     changed_when: false
     register: slurm_version
 
-  - debug:
+  - name: Display slurm version
+    ansible.builtin.debug:
       var: slurm_version.stdout
 
   # normally only started on init
-  - name: check starting slurm-resources
+  - name: Check starting slurm-resources
     become: true
-    systemd:
+    ansible.builtin.systemd:
       name: slurm-resources.service
       state: started
 
-  - name: check running slurm-resources script
-    command: slurm-resources -e restart_slurm=true -e slurm_max_cpus=2
+  - name: Check running slurm-resources script
+    ansible.builtin.command: slurm-resources -e restart_slurm=true -e slurm_max_cpus=2
     changed_when: false

@@ -2,11 +2,12 @@ allow_duplicates: false
 
 galaxy_info:
   role_name: slurm
+  namespace: marvel-nccr
   author: "MARVEL NCCR"
   # yamllint disable-line rule:line-length
   description: "An Ansible role that installs the [slurm](https://slurm.schedmd.com/) workload manager on Ubuntu."
   license: MIT
-  min_ansible_version: 2.7
+  min_ansible_version: "2.7"
   platforms:
   - name: Ubuntu
     versions:

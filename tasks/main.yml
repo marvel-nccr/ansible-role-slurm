@@ -1,21 +1,21 @@
 - name: Install dirmngr
   become: true
-  apt:
+  ansible.builtin.apt:
     name: dirmngr
     state: present
     update_cache: true
 
-- name: add ansible repository
+- name: Add ansible repository
   # ansible directly available in ubuntu 20.04: https://github.com/ansible/ansible/pull/69161
   when: ansible_facts['distribution_major_version'] | int < 20
   become: true
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: 'ppa:ansible/ansible'
     state: present
 
 - name: Install apt packages
   become: true
-  apt:
+  ansible.builtin.apt:
     update_cache: true
     cache_valid_time: 86400
     name:
@@ -26,17 +26,17 @@
     - sendmail
     - ansible
 
-- name: hide slurm user (created by slurm package) on login screens
+- name: Hide slurm user (created by slurm package) on login screens
   become: true
-  ini_file:
+  community.general.ini_file:
     path: "/var/lib/AccountsService/users/slurm"
     section: "User"
     option: "SystemAccount"
     value: "true"
 
-- name: create directories for slurm
+- name: Create directories for slurm
   become: true
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: directory
     owner: "{{ slurm_user }}"
@@ -54,7 +54,7 @@
 # https://slurm.schedmd.com/configurator.html
 - name: Copy slurm configuration template
   become: true
-  template:
+  ansible.builtin.template:
     src: slurm.conf
     owner: "{{ slurm_user }}"
     dest: /etc/slurm-llnl/slurm.conf
@@ -64,30 +64,31 @@
     slurm_pid_dir: "{{ '/var/run/slurm-llnl' if ansible_facts['distribution_major_version'] | int < 20 else '/run' }}"
   register: conf_template
 
-- include_tasks: resources_service.yml
+- name: Include resources service tasks
+  ansible.builtin.include_tasks: resources_service.yml
 
 # munge key already created by apt-get install
 # will not overwrite key due to 'creates' flag
 # but useful to avoid prompts
-- name: create munge key
+- name: Create munge key
   become: true
-  command: /usr/sbin/create-munge-key -f
+  ansible.builtin.command: /usr/sbin/create-munge-key -f
   args:
     creates: "/etc/munge/munge.key"
 
 # munge should start before slurm daemons
 # https://slurm.schedmd.com/quickstart_admin.html
-- name: start munge service
+- name: Start munge service
   become: true
-  service:
+  ansible.builtin.service:
     name: "{{ item }}"
     state: started
   with_items:
   - munge
 
-- name: start slurm services
+- name: Start slurm services
   become: true
-  service:
+  ansible.builtin.service:
     name: "{{ item }}"
     state: started
   with_items:
@@ -96,5 +97,6 @@
 # slurmdbd does not exist in SLURM 15.08
 #    - slurmdbd
 
-- import_tasks: tests.yml
+- name: Import tests tasks
+  ansible.builtin.import_tasks: tests.yml
   when: run_tests is defined and run_tests
