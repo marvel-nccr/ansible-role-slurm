@@ -11,12 +11,12 @@
 
   tasks:
 
-    - debug:
+    - ansible.builtin.debug:
         msg: "Run: {{ lookup('pipe', 'date +%Y-%m-%d-%H:%M:%S') }}"
 
     - name: "Update SLURM ControlMachine={{ ansible_hostname }}"
       become: true
-      lineinfile:
+      ansible.builtin.lineinfile:
         dest: "{{ slurm_conf_file }}"
         regexp: '^ControlMachine='
         line: "ControlMachine={{ ansible_hostname }}"
@@ -24,7 +24,7 @@
 
     - name: Update SLURM node configuration
       become: true
-      blockinfile:
+      ansible.builtin.blockinfile:
         path: "{{ slurm_conf_file }}"
         marker: "# {mark} ANSIBLE MANAGED NODES"
         block: |
@@ -36,7 +36,7 @@
     - name: Restart Slurm
       when: (update.changed and restart_on_change | bool) or (restart_slurm | bool)
       become: true
-      service:
+      ansible.builtin.service:
         name: "{{ item }}"
         state: restarted
       with_items:
