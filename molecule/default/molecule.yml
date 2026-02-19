@@ -21,6 +21,7 @@ provisioner:
   # log: true  # use for debugging
   playbooks:
     converge: converge.yml
+    verify: verify.yml
   config_options:
     defaults:
       # nicer stdout printing
